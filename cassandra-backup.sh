@@ -1,26 +1,23 @@
 #!/bin/bash
 
-#KEYSPACE=apester
 DATE=`date +"%Y-%m-%d--%H-%M-%S"`
 FOLDER_NAME=${DATE}-daily
 S3_BUCKET=s3://cassandra-bi-archive
 S3_BUCKET_PATH=cassandra/full/`date +"%Y/%m/%d/%H/%M"`/`cat /etc/hostname`
 SNAPSHOTID=`uuidgen --time`
-#PGP_KEY_RECIPIENT=YOUR-PGP-KEY-RECIPIENT
 
 echo "------ NEW RUN ------"
 echo "Clearing existing snapshots"
 nodetool clearsnapshot
 
 echo "Taking daily db dump for $DATE with id=$SNAPSHOTID"
-
 nodetool snapshot --tag $SNAPSHOTID
 
 TABLES=`ls /mnt/cassandra/data`
 for table in $TABLES
 do
     echo ""
-    echo "Encrypting and sending all $table files one by one..."
+    echo "sending all $table files one by one..."
     FILES=`find /mnt/cassandra/data/${table}/*/snapshots/$SNAPSHOTID -type f`
     for filename in $FILES
     do
