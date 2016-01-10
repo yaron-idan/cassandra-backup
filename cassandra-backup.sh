@@ -27,7 +27,7 @@ do
         do
             # Need to deal with files one by one to not have the file usage explode
             # because we are dealing with hardlinks.
-            #aws s3 cp $filename $S3_BUCKET/$S3_BUCKET_PATH/$table/`basename $filename` 
+            aws s3 cp $filename $S3_BUCKET/$S3_BUCKET_PATH/$table/`basename $filename` 
             echo 'Current file is - '$filename
         done
     done
